@@ -443,6 +443,24 @@
     border-top: 1px solid rgba(245,240,232,0.1);
     padding-top: 0.9rem;
   }
+  .lb-instagram {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 1.2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    border: 1px solid var(--accent);
+    padding: 0.5rem 1rem;
+    transition: all 0.2s;
+  }
+  .lb-instagram:hover, .lb-instagram:active {
+    background: var(--accent);
+    color: #f5f0e8;
+  }
 
   /* Close button */
   .lb-close {
@@ -679,6 +697,7 @@
       <p class="lb-medium" id="lbMedium"></p>
       <p class="lb-dim" id="lbDim"></p>
       <p class="lb-note" id="lbNote" style="display:none"></p>
+      <a class="lb-instagram" id="lbInstagram" href="#" target="_blank" style="display:none">▶ Bekijk video op Instagram</a>
     </div>
   </div>
   <div class="lb-counter" id="lbCounter"></div>
@@ -696,7 +715,7 @@ const ARTWORKS = [
   { title: "Bildts landschap III", filename: "Bildts landschap III.JPG", medium: "Aquarel", year: 2025, dim: "29 x 39 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
   { title: "Bildts landschap II", filename: "Bildts landschap II.JPG", medium: "Aquarel", year: 2025, dim: "29 x 39 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
   { title: "Geborgenheid", filename: "Geborgenheid.JPG", medium: "Mixed media: Acrylstift en gelpen op fotokarton", year: 2024, dim: "40 x 60 cm", orientation: "Landscape", note: "Gemaakt in het kader van het thema geborgenheid voor het vak Beeldend Onderzoek (Kunstacademie Friesland). Uitwerking is geïnspireerd op Night Crossing van Matthew Wong.", featured: true, is_url: false },
-  { title: "Vereniging", filename: "https://www.instagram.com/p/DBGmdcrI5SQ/", medium: "Stop-motion animatie", year: 2024, dim: "", orientation: "Portrait", note: "Ontstaan tijdens het vak Beeldend Onderzoek bij Kunstacademie Friesland. Gestart met een halsketting en uiteindelijk de diepte ingegaan via het rijgsnoer wat als functie heeft om te verbinden, te verenigen.", featured: true, is_url: true },
+  { title: "Vereniging", filename: "Vereniging.JPG", instagram: "https://www.instagram.com/p/DBGmdcrI5SQ/", medium: "Stop-motion animatie", year: 2024, dim: "", orientation: "Portrait", note: "Ontstaan tijdens het vak Beeldend Onderzoek bij Kunstacademie Friesland. Gestart met een halsketting en uiteindelijk de diepte ingegaan via het rijgsnoer wat als functie heeft om te verbinden, te verenigen.", featured: true, is_url: false },
   { title: "Dreiging", filename: "Dreiging.jpeg", medium: "Mixed media: Gouache en inkt op aquarelpapier", year: 2024, dim: "30 x 40 cm", orientation: "Landscape", note: "Ontwerp voor (uiteindelijk niet gemaakte) linodruk, gebaseerd op Code Rood.", featured: true, is_url: false },
   { title: "Code Rood 4", filename: "Code Rood 4.JPG", medium: "Linodruk", year: 2024, dim: "15 x 20 cm", orientation: "Landscape", note: "", featured: true, is_url: false },
   { title: "Ritme van de nerven III", filename: "Ritme van de nerven III.jpeg", medium: "Inkt", year: 2024, dim: "23 x 31 cm", orientation: "Landscape", note: "", featured: true, is_url: false },
@@ -714,7 +733,7 @@ const ARTWORKS = [
   { title: "Canterlanswei nabij Lekkum II", filename: "20240808 Canterlanswei nabij Lekkum 2.jpeg", medium: "Aquarel", year: 2024, dim: "29,7 x 21 cm", orientation: "Portrait", note: "Variant gemaakt na aanleiding van Canterlanswei nabij Lekkum I.", featured: true, is_url: false },
   { title: "Canterlanswei nabij Lekkum I", filename: "20240808 Canterlanswei nabij Lekkum 1.jpeg", medium: "Aquarel", year: 2024, dim: "30 x 24 cm", orientation: "Portrait", note: "Gemaakt tijdens de aquarelweek 2024 van Kunstacademie Friesland, tijdens een en plein air sessie langs de Canterlanswei nabij Lekkum.", featured: true, is_url: false },
   { title: "Impressionism", filename: "Imperfectionism (...) 2024", medium: "Acryl op canvas", year: 2024, dim: "39 x 39 cm", orientation: "Square", note: "Imperfectionism is ontstaan tijdens de Art Upgrade-cursus van Kunstacademie Friesland, in het kader van het thema metamorfose.", featured: true, is_url: false },
-  { title: "Ruimte in beweging", filename: "https://www.instagram.com/p/CygepK-Mfrp/", medium: "Animatie", year: 2023, dim: "", orientation: "Portrait", note: "Ruimte in beweging komt voort uit het project Kamers antikamers. Is ruimte een context voor beweging? Of is beweging een context voor ruimte?", featured: true, is_url: true },
+  { title: "Ruimte in beweging", filename: "Ruimte in beweging 2023.jpeg", instagram: "https://www.instagram.com/p/CygepK-Mfrp/", medium: "Animatie", year: 2023, dim: "", orientation: "Portrait", note: "Ruimte in beweging komt voort uit het project Kamers antikamers. Is ruimte een context voor beweging? Of is beweging een context voor ruimte?", featured: true, is_url: false },
   { title: "Geen titel", filename: "Untitled 2024 3", medium: "Mixed media: Acrylverf en inkt op papier", year: 2024, dim: "70 x 50 cm", orientation: "Portrait", note: "Gemaakt in het kader van Art Upgrade blok 3 thema 'Apocalyps'", featured: true, is_url: false },
   { title: "Geen titel", filename: "Untitled 2024 2", medium: "Mixed media: Softpastel en inkt op papier", year: 2024, dim: "35 x 50 cm", orientation: "Landscape", note: "Gemaakt in het kader van Art Upgrade blok 3 thema 'Apocalyps'", featured: true, is_url: false },
   { title: "Geen titel", filename: "Untitled 2024 1", medium: "Softpastel op papier", year: 2024, dim: "50 x 70 cm", orientation: "Landscape", note: "Kleurstudie in het kader van Art Upgrade blok 3 thema 'Apocalyps' – geïnspireerd op Blue tree van Alle Jong.", featured: true, is_url: false },
@@ -874,6 +893,15 @@ function updateLightbox() {
     wrap.innerHTML = `<img src="images/${work.filename}" alt="${work.title}">`;
     const img = wrap.querySelector('img');
     if (img) tryExtensions(img, work.filename);
+  }
+
+  // Instagram-knop tonen als het werk een video heeft
+  const lbInsta = document.getElementById('lbInstagram');
+  if (work.instagram) {
+    lbInsta.href = work.instagram;
+    lbInsta.style.display = 'inline-flex';
+  } else {
+    lbInsta.style.display = 'none';
   }
 }
 
