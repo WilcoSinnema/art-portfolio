@@ -121,7 +121,7 @@ De app bevat 44 werken (uit Portfolio.xlsx, Sheet1), gesorteerd van nieuw naar o
 
 | Functie | Beschrijving |
 |---|---|
-| Masonry grid | 3 kolommen op desktop, 2 op tablet en mobiel |
+| Masonry grid | 3 kolommen op desktop, 2 op tablet, 1 op mobiel (< 480px) |
 | Hamburger-menu | Inklapbaar navigatiemenu op mobiel (< 600px) |
 | Filter op jaar | 2023 / 2024 / 2025 / 2026 / Alle werken — horizontaal scrollbaar op mobiel |
 
@@ -216,6 +216,7 @@ Betroffen werken (bestandsnaam zonder extensie in Excel):
 | 2.3 | feb 2026 | Afbeeldingsoptimalisatie: optimize-images.sh script toegevoegd, thumbnails (800px) en geoptimaliseerde versies (1600px) voor 82% kleinere bestandsgrootte, srcset voor responsive laden, fade-in effect bij laden |
 | 2.4 | feb 2026 | Documentatie bijgewerkt: filter uitgelicht verwijderd, Vereniging en Ruimte in beweging krijgen afbeelding + Instagram-knop via nieuw `instagram`-veld |
 | 2.5 | feb 2026 | Volgorde werken gesorteerd op jaar (nieuw → oud): 2026 → 2025 → 2024 → 2023. KAK-13 (2024) en Ruimte in beweging (2023) stonden op verkeerde positie en zijn gecorrigeerd |
+| 2.6 | feb 2026 | Galerij op mobiel (< 480px) teruggezet naar 1 kolom voor betere leesbaarheid |
 
 ---
 
