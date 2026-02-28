@@ -249,6 +249,9 @@
     background: var(--light);
     /* Tap highlight suppression */
     -webkit-tap-highlight-color: transparent;
+    /* Performance: skip rendering off-screen items */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 300px;
   }
   .artwork.visible { opacity: 1; transform: translateY(0); }
 
@@ -775,6 +778,11 @@ function getThumbPath(filename) {
   return `images/thumbs/${base}.jpg`;
 }
 
+function getThumbSmPath(filename) {
+  const base = getImageBasename(filename);
+  return `images/thumbs-sm/${base}.jpg`;
+}
+
 function getOptimizedPath(filename) {
   const base = getImageBasename(filename);
   return `images/optimized/${base}.jpg`;
@@ -788,22 +796,27 @@ function getOriginalPath(filename) {
 // Fallback: try original extensions if optimized version fails
 const EXTENSIONS = ['.jpeg', '.jpg', '.JPG', '.JPEG', '.png', '.PNG'];
 
-function setupImageFallback(img, filename, isThumb) {
+function setupImageFallback(img, filename) {
   if (!filename) return;
 
-  const basePath = isThumb ? 'images/thumbs/' : 'images/optimized/';
   const base = getImageBasename(filename);
 
-  // First try: optimized .jpg version
-  img.src = `${basePath}${base}.jpg`;
+  // Build fallback chain: thumbs-sm -> thumbs -> optimized -> original
+  const fallbackChain = [
+    `images/thumbs-sm/${base}.jpg`,
+    `images/thumbs/${base}.jpg`,
+    `images/optimized/${base}.jpg`,
+    ...EXTENSIONS.map(ext => `images/${base}${ext}`)
+  ];
 
-  // Fallback chain: try original file with various extensions
-  let fallbackAttempt = 0;
-  const originalCandidates = EXTENSIONS.map(ext => `images/${base}${ext}`);
+  // Find current position in chain
+  let currentIdx = fallbackChain.indexOf(img.src);
+  if (currentIdx === -1) currentIdx = -1; // Start from beginning if not found
 
   img.onerror = function() {
-    if (fallbackAttempt < originalCandidates.length) {
-      img.src = originalCandidates[fallbackAttempt++];
+    currentIdx++;
+    if (currentIdx < fallbackChain.length) {
+      img.src = fallbackChain[currentIdx];
     } else {
       img.onerror = null; // Give up
     }
@@ -845,14 +858,19 @@ function renderGallery() {
           <p class="ov-meta">${work.year}</p>
         </div>`;
     } else {
+      const thumbSmSrc = getThumbSmPath(work.filename);
       const thumbSrc = getThumbPath(work.filename);
       const optimizedSrc = getOptimizedPath(work.filename);
+      // First 6 images load eagerly for faster above-the-fold display
+      const isAboveFold = i < 6;
       div.innerHTML = `
-        <img src="${thumbSrc}"
-             srcset="${thumbSrc} 800w, ${optimizedSrc} 1600w"
-             sizes="(max-width: 480px) 45vw, (max-width: 900px) 45vw, 30vw"
+        <img src="${thumbSmSrc}"
+             srcset="${thumbSmSrc} 400w, ${thumbSrc} 800w, ${optimizedSrc} 1600w"
+             sizes="(max-width: 480px) 92vw, (max-width: 900px) 45vw, 30vw"
              alt="${work.title}"
-             loading="lazy">
+             loading="${isAboveFold ? 'eager' : 'lazy'}"
+             decoding="async"
+             fetchpriority="${isAboveFold ? 'high' : 'low'}">
         <div class="artwork-overlay">
           <p class="ov-title">${work.title}</p>
           <p class="ov-meta">${work.year}${work.dim ? ' — ' + work.dim : ''}</p>
@@ -860,7 +878,7 @@ function renderGallery() {
       // Setup fallback if optimized version doesn't exist
       const img = div.querySelector('img');
       if (img) {
-        setupImageFallback(img, work.filename, true);
+        setupImageFallback(img, work.filename);
         // Fade in when loaded
         img.onload = () => img.classList.add('loaded');
         if (img.complete) img.classList.add('loaded');
@@ -935,7 +953,7 @@ function updateLightbox() {
     const optimizedSrc = getOptimizedPath(work.filename);
     wrap.innerHTML = `<img src="${optimizedSrc}" alt="${work.title}">`;
     const img = wrap.querySelector('img');
-    if (img) setupImageFallback(img, work.filename, false);
+    if (img) setupImageFallback(img, work.filename);
   }
 
   // Instagram-knop tonen als het werk een video heeft

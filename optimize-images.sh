@@ -8,11 +8,15 @@ set -e
 IMAGES_DIR="images"
 OPTIMIZED_DIR="images/optimized"
 THUMBS_DIR="images/thumbs"
+THUMBS_SM_DIR="images/thumbs-sm"
 
 # Image dimensions
-FULL_MAX=1600      # Max width/height for lightbox images
-THUMB_WIDTH=800    # Thumbnail width for gallery
-QUALITY=82         # JPEG quality (0-100)
+FULL_MAX=1600       # Max width/height for lightbox images
+THUMB_WIDTH=800     # Thumbnail width for gallery (tablet/desktop)
+THUMB_SM_WIDTH=400  # Small thumbnail for mobile
+QUALITY=78          # JPEG quality for optimized (0-100)
+THUMB_QUALITY=72    # Thumbnail quality (slightly lower for speed)
+THUMB_SM_QUALITY=68 # Mobile thumbnail quality (prioritize speed)
 
 echo "=== Art Portfolio Image Optimizer ==="
 echo ""
@@ -20,6 +24,7 @@ echo ""
 # Create output directories
 mkdir -p "$OPTIMIZED_DIR"
 mkdir -p "$THUMBS_DIR"
+mkdir -p "$THUMBS_SM_DIR"
 
 # Count images
 total=$(find "$IMAGES_DIR" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | wc -l | tr -d ' ')
@@ -58,11 +63,18 @@ find "$IMAGES_DIR" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -
         fi
     fi
 
-    # Create thumbnail (800px wide)
+    # Create thumbnail (800px wide for tablet/desktop)
     if [ "$width" -gt "$THUMB_WIDTH" ]; then
-        sips --resampleWidth $THUMB_WIDTH -s format jpeg -s formatOptions $QUALITY "$img" --out "$THUMBS_DIR/$out_name" 2>/dev/null
+        sips --resampleWidth $THUMB_WIDTH -s format jpeg -s formatOptions $THUMB_QUALITY "$img" --out "$THUMBS_DIR/$out_name" 2>/dev/null
     else
-        sips -s format jpeg -s formatOptions $QUALITY "$img" --out "$THUMBS_DIR/$out_name" 2>/dev/null
+        sips -s format jpeg -s formatOptions $THUMB_QUALITY "$img" --out "$THUMBS_DIR/$out_name" 2>/dev/null
+    fi
+
+    # Create small thumbnail (400px wide for mobile - prioritizes speed)
+    if [ "$width" -gt "$THUMB_SM_WIDTH" ]; then
+        sips --resampleWidth $THUMB_SM_WIDTH -s format jpeg -s formatOptions $THUMB_SM_QUALITY "$img" --out "$THUMBS_SM_DIR/$out_name" 2>/dev/null
+    else
+        sips -s format jpeg -s formatOptions $THUMB_SM_QUALITY "$img" --out "$THUMBS_SM_DIR/$out_name" 2>/dev/null
     fi
 done
 
@@ -74,11 +86,14 @@ echo ""
 orig_size=$(du -sh "$IMAGES_DIR" | awk '{print $1}')
 opt_size=$(du -sh "$OPTIMIZED_DIR" | awk '{print $1}')
 thumb_size=$(du -sh "$THUMBS_DIR" | awk '{print $1}')
+thumb_sm_size=$(du -sh "$THUMBS_SM_DIR" | awk '{print $1}')
 
-echo "Original images:  $orig_size"
-echo "Optimized images: $opt_size"
-echo "Thumbnails:       $thumb_size"
+echo "Original images:     $orig_size"
+echo "Optimized images:    $opt_size"
+echo "Thumbnails (800px):  $thumb_size"
+echo "Thumbnails (400px):  $thumb_sm_size"
 echo ""
 echo "Images saved to:"
-echo "  - $OPTIMIZED_DIR/ (for lightbox)"
-echo "  - $THUMBS_DIR/ (for gallery)"
+echo "  - $OPTIMIZED_DIR/ (for lightbox, max 1600px)"
+echo "  - $THUMBS_DIR/ (for tablet/desktop gallery, 800px)"
+echo "  - $THUMBS_SM_DIR/ (for mobile gallery, 400px - fastest loading)"

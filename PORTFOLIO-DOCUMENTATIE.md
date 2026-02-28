@@ -26,15 +26,18 @@ Zet de bestanden als volgt neer op je computer:
     ├── ... (alle overige originele bestanden)
     │
     ├── 📁 optimized/                ← geoptimaliseerde afbeeldingen (lightbox)
-    │   └── *.jpg                    ← max 1600px, ~300-600 KB per stuk
+    │   └── *.jpg                    ← max 1600px, ~300-500 KB per stuk
     │
-    └── 📁 thumbs/                   ← thumbnails (galerij)
-        └── *.jpg                    ← 800px breed, ~100-200 KB per stuk
+    ├── 📁 thumbs/                   ← thumbnails (tablet/desktop galerij)
+    │   └── *.jpg                    ← 800px breed, ~100-150 KB per stuk
+    │
+    └── 📁 thumbs-sm/                ← kleine thumbnails (mobiele galerij)
+        └── *.jpg                    ← 400px breed, ~25-50 KB per stuk
 ```
 
 > **Let op:** De bestandsnamen in de `images/` map moeten **exact** overeenkomen met de namen in de kolom `Bestandsnaam` van Portfolio.xlsx — inclusief hoofdletters, spaties en extensies (.JPG vs .jpeg).
 
-> **Geoptimaliseerde mappen:** De mappen `optimized/` en `thumbs/` worden gegenereerd door `optimize-images.sh` en staan in `.gitignore`. Ze hoeven niet handmatig beheerd te worden.
+> **Geoptimaliseerde mappen:** De mappen `optimized/`, `thumbs/` en `thumbs-sm/` worden gegenereerd door `optimize-images.sh` en staan in `.gitignore`. Ze hoeven niet handmatig beheerd te worden.
 
 ---
 
@@ -217,6 +220,7 @@ Betroffen werken (bestandsnaam zonder extensie in Excel):
 | 2.4 | feb 2026 | Documentatie bijgewerkt: filter uitgelicht verwijderd, Vereniging en Ruimte in beweging krijgen afbeelding + Instagram-knop via nieuw `instagram`-veld |
 | 2.5 | feb 2026 | Volgorde werken gesorteerd op jaar (nieuw → oud): 2026 → 2025 → 2024 → 2023. KAK-13 (2024) en Ruimte in beweging (2023) stonden op verkeerde positie en zijn gecorrigeerd |
 | 2.6 | feb 2026 | Galerij op mobiel (< 480px) teruggezet naar 1 kolom voor betere leesbaarheid |
+| 2.7 | feb 2026 | Mobiele laadsnelheid verbeterd: nieuwe 400px thumbnails (~37 KB gem.) voor mobiel, 3-tier srcset (400/800/1600px), eager loading voor eerste 6 afbeeldingen, content-visibility optimalisatie |
 
 ---
 
@@ -226,9 +230,10 @@ De app gebruikt geoptimaliseerde afbeeldingen voor snelle laadtijden:
 
 | Map | Gebruik | Formaat | Grootte |
 |-----|---------|---------|---------|
-| `images/` | Originelen (bronbestanden) | Diverse | ~191 MB totaal |
-| `images/optimized/` | Lightbox weergave | 1600px max, JPEG 82% | ~26 MB totaal |
-| `images/thumbs/` | Galerij thumbnails | 800px breed, JPEG 82% | ~8 MB totaal |
+| `images/` | Originelen (bronbestanden) | Diverse | ~229 MB totaal |
+| `images/optimized/` | Lightbox weergave | 1600px max, JPEG 78% | ~25 MB totaal |
+| `images/thumbs/` | Tablet/desktop thumbnails | 800px breed, JPEG 72% | ~7 MB totaal |
+| `images/thumbs-sm/` | Mobiele thumbnails | 400px breed, JPEG 68% | ~2 MB totaal |
 
 ### Optimalisatiescript uitvoeren
 
@@ -240,16 +245,20 @@ Bij het toevoegen van nieuwe afbeeldingen, voer het script uit om geoptimaliseer
 
 Het script:
 1. Leest alle afbeeldingen uit `images/` (jpg, jpeg, png)
-2. Maakt verkleinde versies voor de lightbox (max 1600px)
-3. Maakt thumbnails voor de galerij (800px breed)
-4. Slaat alles op als gecomprimeerde JPEG (kwaliteit 82%)
+2. Maakt verkleinde versies voor de lightbox (max 1600px, kwaliteit 78%)
+3. Maakt thumbnails voor tablet/desktop galerij (800px breed, kwaliteit 72%)
+4. Maakt kleine thumbnails voor mobiele galerij (400px breed, kwaliteit 68%)
+5. Slaat alles op als gecomprimeerde JPEG
 
 ### Responsive afbeeldingen (srcset)
 
-De app gebruikt `srcset` om de juiste afbeeldingsgrootte te laden:
-- **Mobiel/tablet:** thumbnails (800px) worden geladen
-- **Desktop:** geoptimaliseerde versies (1600px) bij grotere weergave
+De app gebruikt `srcset` om de juiste afbeeldingsgrootte te laden afhankelijk van schermgrootte:
+- **Mobiel (< 480px):** kleine thumbnails (400px, ~25-50 KB) voor snelle laadtijden
+- **Tablet (480-900px):** standaard thumbnails (800px)
+- **Desktop (> 900px):** geoptimaliseerde versies (1600px)
 - **Lightbox:** altijd de geoptimaliseerde versie (1600px)
+
+De eerste 6 afbeeldingen laden direct (eager loading), de rest wordt lazy-loaded voor optimale prestaties.
 
 ---
 
