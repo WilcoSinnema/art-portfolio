@@ -252,15 +252,7 @@
   }
   .artwork.visible { opacity: 1; transform: translateY(0); }
 
-  .artwork.featured::after {
-    content: '★';
-    position: absolute;
-    top: 0.5rem; right: 0.6rem;
-    font-size: 0.6rem;
-    color: var(--accent);
-    line-height: 1;
-    pointer-events: none;
-  }
+
 
   .artwork img {
     width: 100%;
@@ -649,7 +641,7 @@
   <button class="filter-btn" data-filter="2025">2025</button>
   <button class="filter-btn" data-filter="2024">2024</button>
   <button class="filter-btn" data-filter="2023">2023</button>
-  <button class="filter-btn" data-filter="featured">★ Uitgelicht</button>
+
   <span class="count" id="count"></span>
 </div>
 
@@ -778,7 +770,6 @@ const countEl = document.getElementById('count');
 // ─── GALLERY RENDER ──────────────────────────────────────────────────────────
 function applyFilter() {
   if (currentFilter === 'all')           filteredList = [...ARTWORKS];
-  else if (currentFilter === 'featured') filteredList = ARTWORKS.filter(w => w.featured);
   else                                   filteredList = ARTWORKS.filter(w => w.year === parseInt(currentFilter));
 }
 
