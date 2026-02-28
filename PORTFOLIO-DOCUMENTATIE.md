@@ -16,16 +16,25 @@ Zet de bestanden als volgt neer op je computer:
 ```
 📁 portfolio/                        ← hoofdmap (naam naar keuze)
 │
-├── index.html                       ← de portfolio-app (dit bestand)
+├── index.html                       ← de portfolio-app
+├── optimize-images.sh               ← script voor afbeeldingsoptimalisatie
+├── .gitignore                       ← git ignore bestand
 │
 └── 📁 images/                       ← map met alle afbeeldingen
     ├── Study of a certain shape (2025).jpeg
     ├── Donkere wolken.JPG
-    ├── Wolken bij Zwarte Haan.JPG
-    ├── ... (alle overige bestanden)
+    ├── ... (alle overige originele bestanden)
+    │
+    ├── 📁 optimized/                ← geoptimaliseerde afbeeldingen (lightbox)
+    │   └── *.jpg                    ← max 1600px, ~300-600 KB per stuk
+    │
+    └── 📁 thumbs/                   ← thumbnails (galerij)
+        └── *.jpg                    ← 800px breed, ~100-200 KB per stuk
 ```
 
 > **Let op:** De bestandsnamen in de `images/` map moeten **exact** overeenkomen met de namen in de kolom `Bestandsnaam` van Portfolio.xlsx — inclusief hoofdletters, spaties en extensies (.JPG vs .jpeg).
+
+> **Geoptimaliseerde mappen:** De mappen `optimized/` en `thumbs/` worden gegenereerd door `optimize-images.sh` en staan in `.gitignore`. Ze hoeven niet handmatig beheerd te worden.
 
 ---
 
@@ -131,6 +140,7 @@ De app bevat 43 werken (uit Portfolio.xlsx, Sheet1):
 1. Voeg een rij toe in Sheet1 met alle kolommen ingevuld.
 2. Zet de exacte bestandsnaam in de kolom `Bestandsnaam`.
 3. Kopieer het afbeeldingsbestand naar de `images/` map.
+4. Voer `./optimize-images.sh` uit om thumbnails en geoptimaliseerde versies te genereren.
 
 ### In index.html
 Voeg een object toe aan het `ARTWORKS`-array (bovenin het `<script>`-blok):
@@ -195,6 +205,40 @@ Betroffen werken (bestandsnaam zonder extensie in Excel):
 | 2.0 | feb 2026 | Nieuwe versie met lokale afbeeldingen en data uit Portfolio.xlsx (43 werken) |
 | 2.1 | feb 2026 | Volledig responsive gemaakt voor mobiel: hamburger-menu, scrollbare filterbar, lightbox met swipe-navigatie en bodemknoppen, overlay altijd zichtbaar op touch-schermen |
 | 2.2 | feb 2026 | Automatische extensie-detectie: app probeert .jpeg/.jpg/.JPG/.png als bestandsnaam geen extensie heeft (geldt voor 19 werken in de Excel) |
+| 2.3 | feb 2026 | Afbeeldingsoptimalisatie: optimize-images.sh script toegevoegd, thumbnails (800px) en geoptimaliseerde versies (1600px) voor 82% kleinere bestandsgrootte, srcset voor responsive laden, fade-in effect bij laden |
+
+---
+
+## Afbeeldingsoptimalisatie
+
+De app gebruikt geoptimaliseerde afbeeldingen voor snelle laadtijden:
+
+| Map | Gebruik | Formaat | Grootte |
+|-----|---------|---------|---------|
+| `images/` | Originelen (bronbestanden) | Diverse | ~191 MB totaal |
+| `images/optimized/` | Lightbox weergave | 1600px max, JPEG 82% | ~26 MB totaal |
+| `images/thumbs/` | Galerij thumbnails | 800px breed, JPEG 82% | ~8 MB totaal |
+
+### Optimalisatiescript uitvoeren
+
+Bij het toevoegen van nieuwe afbeeldingen, voer het script uit om geoptimaliseerde versies te genereren:
+
+```bash
+./optimize-images.sh
+```
+
+Het script:
+1. Leest alle afbeeldingen uit `images/` (jpg, jpeg, png)
+2. Maakt verkleinde versies voor de lightbox (max 1600px)
+3. Maakt thumbnails voor de galerij (800px breed)
+4. Slaat alles op als gecomprimeerde JPEG (kwaliteit 82%)
+
+### Responsive afbeeldingen (srcset)
+
+De app gebruikt `srcset` om de juiste afbeeldingsgrootte te laden:
+- **Mobiel/tablet:** thumbnails (800px) worden geladen
+- **Desktop:** geoptimaliseerde versies (1600px) bij grotere weergave
+- **Lightbox:** altijd de geoptimaliseerde versie (1600px)
 
 ---
 
@@ -202,5 +246,6 @@ Betroffen werken (bestandsnaam zonder extensie in Excel):
 
 - De app is volledig statisch (geen server, geen database, geen JavaScript-frameworks).
 - Afbeeldingen worden lazy-loaded voor snellere laadtijden.
+- Thumbnails laden met fade-in effect voor vloeiende weergave.
 - De app werkt in alle moderne browsers (Chrome, Firefox, Safari, Edge).
-- Voor gebruik op internet: upload de gehele map (HTML + `images/`) naar een webhosting naar keuze.
+- Voor gebruik op internet: upload de gehele map (HTML + `images/` inclusief submappen) naar een webhosting naar keuze.

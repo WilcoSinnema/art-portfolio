@@ -257,8 +257,12 @@
   .artwork img {
     width: 100%;
     display: block;
-    transition: transform 0.5s ease, filter 0.3s ease;
+    transition: transform 0.5s ease, filter 0.3s ease, opacity 0.4s ease;
     filter: saturate(0.88);
+    opacity: 0;
+  }
+  .artwork img.loaded {
+    opacity: 1;
   }
 
   /* Hover only on devices that support it (not touch) */
@@ -754,28 +758,54 @@ const ARTWORKS = [
   { title: "Kronkeltak", filename: "Kronkeltak 2023", medium: "Mixed media: Softpastel en houtskool op papier", year: 2023, dim: "", orientation: "Landscape", note: "", featured: false, is_url: false },
 ];
 
-// ─── IMAGE EXTENSION HELPER ──────────────────────────────────────────────────
-// Bestandsnamen in de Excel missen soms een extensie (.jpeg / .jpg / .JPG).
-// Deze functie probeert automatisch de juiste extensie als het eerste src faalt.
+// ─── IMAGE PATH HELPERS ──────────────────────────────────────────────────────
+// Optimized images are stored in images/optimized/ and images/thumbs/
+// All optimized files use .jpg extension
+
+function getImageBasename(filename) {
+  if (!filename) return '';
+  // Remove any existing extension and normalize
+  return filename.replace(/\.(jpe?g|png|gif|webp)$/i, '');
+}
+
+function getThumbPath(filename) {
+  const base = getImageBasename(filename);
+  return `images/thumbs/${base}.jpg`;
+}
+
+function getOptimizedPath(filename) {
+  const base = getImageBasename(filename);
+  return `images/optimized/${base}.jpg`;
+}
+
+function getOriginalPath(filename) {
+  // Fallback to original if optimized doesn't exist
+  return `images/${filename}`;
+}
+
+// Fallback: try original extensions if optimized version fails
 const EXTENSIONS = ['.jpeg', '.jpg', '.JPG', '.JPEG', '.png', '.PNG'];
 
-function tryExtensions(img, filename) {
+function setupImageFallback(img, filename, isThumb) {
   if (!filename) return;
-  const hasExt = /\.(jpe?g|png|gif|webp)$/i.test(filename);
-  if (hasExt) {
-    // Bestand heeft al extensie — alleen fallback nodig als het echt faalt
-    img.onerror = null; // al correct pad, geen extra pogingen
-    return;
-  }
-  // Geen extensie: bouw een lijst van kandidaten
-  const candidates = EXTENSIONS.map(ext => `images/${filename}${ext}`);
-  let attempt = 0;
-  function tryNext() {
-    if (attempt >= candidates.length) return; // geen enkel pad werkt
-    img.onerror = tryNext;
-    img.src = candidates[attempt++];
-  }
-  tryNext();
+
+  const basePath = isThumb ? 'images/thumbs/' : 'images/optimized/';
+  const base = getImageBasename(filename);
+
+  // First try: optimized .jpg version
+  img.src = `${basePath}${base}.jpg`;
+
+  // Fallback chain: try original file with various extensions
+  let fallbackAttempt = 0;
+  const originalCandidates = EXTENSIONS.map(ext => `images/${base}${ext}`);
+
+  img.onerror = function() {
+    if (fallbackAttempt < originalCandidates.length) {
+      img.src = originalCandidates[fallbackAttempt++];
+    } else {
+      img.onerror = null; // Give up
+    }
+  };
 }
 
 // ─── STATE ──────────────────────────────────────────────────────────────────
@@ -813,16 +843,26 @@ function renderGallery() {
           <p class="ov-meta">${work.year}</p>
         </div>`;
     } else {
-      const src = work.filename ? `images/${work.filename}` : '';
+      const thumbSrc = getThumbPath(work.filename);
+      const optimizedSrc = getOptimizedPath(work.filename);
       div.innerHTML = `
-        <img src="${src}" alt="${work.title}" loading="lazy">
+        <img src="${thumbSrc}"
+             srcset="${thumbSrc} 800w, ${optimizedSrc} 1600w"
+             sizes="(max-width: 480px) 45vw, (max-width: 900px) 45vw, 30vw"
+             alt="${work.title}"
+             loading="lazy">
         <div class="artwork-overlay">
           <p class="ov-title">${work.title}</p>
           <p class="ov-meta">${work.year}${work.dim ? ' — ' + work.dim : ''}</p>
         </div>`;
-      // Auto-try extensions if filename has none or image fails to load
+      // Setup fallback if optimized version doesn't exist
       const img = div.querySelector('img');
-      if (img) tryExtensions(img, work.filename);
+      if (img) {
+        setupImageFallback(img, work.filename, true);
+        // Fade in when loaded
+        img.onload = () => img.classList.add('loaded');
+        if (img.complete) img.classList.add('loaded');
+      }
     }
 
     div.addEventListener('click', () => openLightbox(i));
@@ -890,9 +930,10 @@ function updateLightbox() {
         <a href="${work.filename}" target="_blank">Bekijk op Instagram →</a>
       </div>`;
   } else {
-    wrap.innerHTML = `<img src="images/${work.filename}" alt="${work.title}">`;
+    const optimizedSrc = getOptimizedPath(work.filename);
+    wrap.innerHTML = `<img src="${optimizedSrc}" alt="${work.title}">`;
     const img = wrap.querySelector('img');
-    if (img) tryExtensions(img, work.filename);
+    if (img) setupImageFallback(img, work.filename, false);
   }
 
   // Instagram-knop tonen als het werk een video heeft

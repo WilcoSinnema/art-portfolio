@@ -1,0 +1,6 @@
+# macOS
+.DS_Store
+
+# Optimized images (generated from originals via optimize-images.sh)
+images/optimized/
+images/thumbs/
