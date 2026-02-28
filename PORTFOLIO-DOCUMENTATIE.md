@@ -64,53 +64,54 @@ De app werkt volledig offline — er is geen server of internetverbinding nodig 
 
 ## Werken in het portfolio
 
-De app bevat 43 werken (uit Portfolio.xlsx, Sheet1):
+De app bevat 44 werken (uit Portfolio.xlsx, Sheet1):
 
 | # | Titel | Jaar | Medium | Afmetingen | Uitgelicht |
 |---|---|---|---|---|---|
-| 1 | Study of a certain shape | 2025 | Collage met acryl, inkt en houtskool | 70 x 50 cm | — |
-| 2 | Donkere wolken | 2025 | Acryl op mdf | 100 x 150 cm | — |
-| 3 | Wolken bij Zwarte Haan | 2025 | Acryl op mdf | 100 x 150 cm | — |
-| 4 | Bildts landschap III | 2025 | Aquarel | 29 x 39 cm | — |
-| 5 | Bildts landschap II | 2025 | Aquarel | 29 x 39 cm | — |
-| 6 | Geborgenheid | 2024 | Mixed media: Acrylstift en gelpen op fotokarton | 40 x 60 cm | ★ |
-| 7 | Vereniging | 2024 | Stop-motion animatie | — | ★ |
-| 8 | Dreiging | 2024 | Mixed media: Gouache en inkt op aquarelpapier | 30 x 40 cm | ★ |
-| 9 | Code Rood 4 | 2024 | Linodruk | 15 x 20 cm | ★ |
-| 10 | Ritme van de nerven III | 2024 | Inkt | 23 x 31 cm | ★ |
-| 11 | Ritme van de nerven II | 2024 | Inkt | 23 x 31 cm | ★ |
-| 12 | Ritme van de nerven I | 2024 | Inkt | 23 x 31 cm | ★ |
-| 13 | Code Rood III | 2024 | Mixed media: aquarelverf en inkt | 23 x 31 cm | ★ |
-| 14 | Code Rood II | 2024 | Mixed media: aquarelverf en inkt | 23 x 31 cm | ★ |
-| 15 | Code Rood I | 2024 | Mixed media: aquarelverf en inkt | 23 x 31 cm | ★ |
-| 16 | Bildts landschap | 2024 | Mixed media: aquarelverf en inkt | 23 x 31 cm | ★ |
-| 17 | Just Watch III | 2024 | Mixed media: aquarelverf en inkt | 18 x 26 cm | — |
-| 18 | Just Watch II | 2024 | Mixed media: aquarelverf en inkt | 18 x 26 cm | — |
-| 19 | Just Watch I | 2024 | Mixed media: aquarelverf en inkt | 18 x 26 cm | ★ |
-| 20 | Canterlanswei nabij Lekkum IV | 2024 | Aquarel | 12,5 x 18 cm | ★ |
-| 21 | Canterlanswei nabij Lekkum III | 2024 | Aquarel | 26 x 18 cm | ★ |
-| 22 | Canterlanswei nabij Lekkum II | 2024 | Aquarel | 29,7 x 21 cm | ★ |
-| 23 | Canterlanswei nabij Lekkum I | 2024 | Aquarel | 30 x 24 cm | ★ |
-| 24 | Impressionism | 2024 | Acryl op canvas | 39 x 39 cm | ★ |
-| 25 | Ruimte in beweging | 2023 | Animatie | — | ★ |
-| 26 | Geen titel | 2024 | Mixed media: Acrylverf en inkt op papier | 70 x 50 cm | ★ |
-| 27 | Geen titel | 2024 | Mixed media: Softpastel en inkt op papier | 35 x 50 cm | ★ |
-| 28 | Geen titel | 2024 | Softpastel op papier | 50 x 70 cm | ★ |
-| 29 | Geen titel | 2023 | 3d interieur | — | — |
-| 30 | Geen titel | 2023 | Potlood op papier | — | ★ |
-| 31 | Energy | 2023 | Mixed media: Inkt en softpastel op pastelmat | 40 x 30 cm | ★ |
-| 32 | KAK-1 | 2023 | Mixed media: Acrylverf en inkt op papier | 24 x 38,5 cm | — |
-| 33 | KAK-2 | 2023 | Mixed media: Acrylverf en inkt op papier | 25,2 x 39,5 cm | — |
-| 34 | KAK-3 | 2023 | Mixed media: Acrylverf, inkt en gelpen op papier | 26,5 x 37,8 cm | — |
-| 35 | KAK-4 | 2023 | Mixed media: Acrylverf en inkt op papier | 28,5 x 38 cm | — |
-| 36 | Kamers antikamers 5 | 2023 | Acrylverf op papier | 28,6 x 34,3 cm | ★ |
-| 37 | KAK-6 | 2023 | Mixed media: Acrylverf en inkt op papier | 23,5 x 39 cm | — |
-| 38 | KAK-10 | 2023 | Mixed media: Inkt en softpastel op pastelmat | 30 x 40 cm | — |
-| 39 | KAK-11 | 2023 | Mixed media: Inkt en softpastel op pastelmat | 30 x 40 cm | — |
-| 40 | KAK-12 | 2023 | Mixed media: Acrylverf en inkt op papier | 26,7 x 36 cm | — |
-| 41 | KAK-13 | 2024 | Mixed media: Inkt en softpastel op papier | 50 x 70 cm | — |
-| 42 | Geen titel | 2023 | Softpastel op pastelmat | 30 x 40 cm | — |
-| 43 | Kronkeltak | 2023 | Mixed media: Softpastel en houtskool op papier | — | — |
+| 1 | Study of a certain shape, sculptuur | 2026 | Sculpture | — | — |
+| 2 | Study of a certain shape | 2025 | Collage met acryl, inkt en houtskool | 70 x 50 cm | — |
+| 3 | Donkere wolken | 2025 | Acryl op mdf | 100 x 150 cm | — |
+| 4 | Wolken bij Zwarte Haan | 2025 | Acryl op mdf | 100 x 150 cm | — |
+| 5 | Bildts landschap III | 2025 | Aquarel | 29 x 39 cm | — |
+| 6 | Bildts landschap II | 2025 | Aquarel | 29 x 39 cm | — |
+| 7 | Geborgenheid | 2024 | Mixed media: Acrylstift en gelpen op fotokarton | 40 x 60 cm | ★ |
+| 8 | Vereniging | 2024 | Stop-motion animatie | — | ★ |
+| 9 | Dreiging | 2024 | Mixed media: Gouache en inkt op aquarelpapier | 30 x 40 cm | ★ |
+| 10 | Code Rood 4 | 2024 | Linodruk | 15 x 20 cm | ★ |
+| 11 | Ritme van de nerven III | 2024 | Inkt | 23 x 31 cm | ★ |
+| 12 | Ritme van de nerven II | 2024 | Inkt | 23 x 31 cm | ★ |
+| 13 | Ritme van de nerven I | 2024 | Inkt | 23 x 31 cm | ★ |
+| 14 | Code Rood III | 2024 | Mixed media: aquarelverf en inkt | 23 x 31 cm | ★ |
+| 15 | Code Rood II | 2024 | Mixed media: aquarelverf en inkt | 23 x 31 cm | ★ |
+| 16 | Code Rood I | 2024 | Mixed media: aquarelverf en inkt | 23 x 31 cm | ★ |
+| 17 | Bildts landschap | 2024 | Mixed media: aquarelverf en inkt | 23 x 31 cm | ★ |
+| 18 | Just Watch III | 2024 | Mixed media: aquarelverf en inkt | 18 x 26 cm | — |
+| 19 | Just Watch II | 2024 | Mixed media: aquarelverf en inkt | 18 x 26 cm | — |
+| 20 | Just Watch I | 2024 | Mixed media: aquarelverf en inkt | 18 x 26 cm | ★ |
+| 21 | Canterlanswei nabij Lekkum IV | 2024 | Aquarel | 12,5 x 18 cm | ★ |
+| 22 | Canterlanswei nabij Lekkum III | 2024 | Aquarel | 26 x 18 cm | ★ |
+| 23 | Canterlanswei nabij Lekkum II | 2024 | Aquarel | 29,7 x 21 cm | ★ |
+| 24 | Canterlanswei nabij Lekkum I | 2024 | Aquarel | 30 x 24 cm | ★ |
+| 25 | Impressionism | 2024 | Acryl op canvas | 39 x 39 cm | ★ |
+| 26 | Ruimte in beweging | 2023 | Animatie | — | ★ |
+| 27 | Geen titel | 2024 | Mixed media: Acrylverf en inkt op papier | 70 x 50 cm | ★ |
+| 28 | Geen titel | 2024 | Mixed media: Softpastel en inkt op papier | 35 x 50 cm | ★ |
+| 29 | Geen titel | 2024 | Softpastel op papier | 50 x 70 cm | ★ |
+| 30 | Geen titel | 2023 | 3d interieur | — | — |
+| 31 | Geen titel | 2023 | Potlood op papier | — | ★ |
+| 32 | Energy | 2023 | Mixed media: Inkt en softpastel op pastelmat | 40 x 30 cm | ★ |
+| 33 | KAK-1 | 2023 | Mixed media: Acrylverf en inkt op papier | 24 x 38,5 cm | — |
+| 34 | KAK-2 | 2023 | Mixed media: Acrylverf en inkt op papier | 25,2 x 39,5 cm | — |
+| 35 | KAK-3 | 2023 | Mixed media: Acrylverf, inkt en gelpen op papier | 26,5 x 37,8 cm | — |
+| 36 | KAK-4 | 2023 | Mixed media: Acrylverf en inkt op papier | 28,5 x 38 cm | — |
+| 37 | Kamers antikamers 5 | 2023 | Acrylverf op papier | 28,6 x 34,3 cm | ★ |
+| 38 | KAK-6 | 2023 | Mixed media: Acrylverf en inkt op papier | 23,5 x 39 cm | — |
+| 39 | KAK-10 | 2023 | Mixed media: Inkt en softpastel op pastelmat | 30 x 40 cm | — |
+| 40 | KAK-11 | 2023 | Mixed media: Inkt en softpastel op pastelmat | 30 x 40 cm | — |
+| 41 | KAK-12 | 2023 | Mixed media: Acrylverf en inkt op papier | 26,7 x 36 cm | — |
+| 42 | KAK-13 | 2024 | Mixed media: Inkt en softpastel op papier | 50 x 70 cm | — |
+| 43 | Geen titel | 2023 | Softpastel op pastelmat | 30 x 40 cm | — |
+| 44 | Kronkeltak | 2023 | Mixed media: Softpastel en houtskool op papier | — | — |
 
 **★ Uitgelicht** = kolom X is gemarkeerd in Portfolio.xlsx
 
@@ -122,7 +123,7 @@ De app bevat 43 werken (uit Portfolio.xlsx, Sheet1):
 |---|---|
 | Masonry grid | 3 kolommen op desktop, 2 op tablet en mobiel |
 | Hamburger-menu | Inklapbaar navigatiemenu op mobiel (< 600px) |
-| Filter op jaar | 2023 / 2024 / 2025 / Alle werken — horizontaal scrollbaar op mobiel |
+| Filter op jaar | 2023 / 2024 / 2025 / 2026 / Alle werken — horizontaal scrollbaar op mobiel |
 | Filter uitgelicht | Toont alleen werken met ★ in kolom X |
 | Overlay | Altijd zichtbaar op touch-schermen; verschijnt bij hover op desktop |
 | Lightbox | Vergroot het werk met alle details en beschrijving |
