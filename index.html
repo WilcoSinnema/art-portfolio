@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wilco Sinnema — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --ink: #1a1510;
+    --dust: #9c8e7a;
+    --line: #d4c9b5;
+    --accent: #8b3a1c;
+    --light: #ede8df;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* Prevent text size adjustment on mobile rotation */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 900;
+    opacity: 0.35;
+  }
+
+  /* Scroll progress */
+  .scroll-line {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: var(--accent);
+    z-index: 9999;
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+
+  /* ═══════════════════════════════════════════
+     HEADER
+  ═══════════════════════════════════════════ */
+  header {
+    padding: 3rem 5vw 2rem;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 5vw;
+    width: 60px; height: 2px;
+    background: var(--accent);
+  }
+
+  .title-block h1 {
+    font-weight: 300;
+    font-size: clamp(2.2rem, 7vw, 4.8rem);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .title-block h1 em { font-style: italic; color: var(--accent); }
+  .title-block .subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.48rem, 1.5vw, 0.6rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dust);
+    margin-top: 0.6rem;
+  }
+
+  /* Desktop nav */
+  .header-nav {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+  .header-nav a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dust);
+    text-decoration: none;
+    transition: color 0.2s;
+    padding: 0.5rem 0; /* larger tap target */
+  }
+  .header-nav a:hover, .header-nav a:focus { color: var(--ink); }
+
+  /* Hamburger — hidden on desktop */
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    margin-right: -10px;
+  }
+  .nav-toggle span {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: var(--ink);
+    transition: transform 0.25s, opacity 0.25s;
+    transform-origin: center;
+  }
+  .nav-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* Mobile nav drawer */
+  .mobile-nav {
+    display: none;
+    flex-direction: column;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding: 0 5vw;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+  .mobile-nav.open {
+    max-height: 200px;
+    padding: 1rem 5vw 1.5rem;
+  }
+  .mobile-nav a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dust);
+    text-decoration: none;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--line);
+    display: block;
+  }
+  .mobile-nav a:last-child { border-bottom: none; }
+  .mobile-nav a:active { color: var(--ink); }
+
+  @media (max-width: 600px) {
+    header { padding: 1.8rem 5vw 1.5rem; }
+    .header-nav { display: none; }
+    .nav-toggle { display: flex; }
+    .mobile-nav { display: flex; }
+  }
+
+  /* ═══════════════════════════════════════════
+     FILTER BAR — horizontaal scrollbaar op mobiel
+  ═══════════════════════════════════════════ */
+  .filter-bar {
+    padding: 0 5vw;
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Stok hoogte zodat tap-targets groot genoeg zijn */
+    min-height: 52px;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+
+  .filter-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dust);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .filter-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--dust);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    /* Minimum tap target */
+    min-height: 36px;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--ink);
+    color: var(--ink);
+    background: var(--light);
+  }
+  .count {
+    margin-left: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem;
+    color: var(--dust);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-left: 0.5rem;
+  }
+
+  /* ═══════════════════════════════════════════
+     GALLERY
+  ═══════════════════════════════════════════ */
+  .gallery {
+    padding: 2rem 4vw;
+    columns: 3;
+    column-gap: 1.2rem;
+  }
+  @media (max-width: 900px) { .gallery { columns: 2; column-gap: 1rem; } }
+  @media (max-width: 480px) {
+    .gallery { columns: 2; column-gap: 0.6rem; padding: 1rem 3vw; }
+  }
+
+  .artwork {
+    break-inside: avoid;
+    margin-bottom: 1.2rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    background: var(--light);
+    /* Tap highlight suppression */
+    -webkit-tap-highlight-color: transparent;
+  }
+  .artwork.visible { opacity: 1; transform: translateY(0); }
+
+  .artwork.featured::after {
+    content: '★';
+    position: absolute;
+    top: 0.5rem; right: 0.6rem;
+    font-size: 0.6rem;
+    color: var(--accent);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .artwork img {
+    width: 100%;
+    display: block;
+    transition: transform 0.5s ease, filter 0.3s ease;
+    filter: saturate(0.88);
+  }
+
+  /* Hover only on devices that support it (not touch) */
+  @media (hover: hover) {
+    .artwork:hover img { transform: scale(1.025); filter: saturate(1); }
+    .artwork:hover .artwork-overlay { transform: translateY(0); }
+  }
+
+  /* On touch: overlay always visible at bottom */
+  .artwork-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(26,21,16,0.85));
+    padding: 2rem 0.8rem 0.7rem;
+    transition: transform 0.3s ease;
+  }
+
+  @media (hover: hover) {
+    .artwork-overlay { transform: translateY(100%); }
+  }
+
+  .artwork-overlay .ov-title {
+    font-size: clamp(0.75rem, 2.5vw, 0.95rem);
+    font-weight: 300;
+    font-style: italic;
+    color: #f5f0e8;
+    line-height: 1.3;
+  }
+  .artwork-overlay .ov-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.42rem, 1.2vw, 0.5rem);
+    letter-spacing: 0.08em;
+    color: rgba(245,240,232,0.5);
+    margin-top: 0.2rem;
+    text-transform: uppercase;
+  }
+
+  /* Video/animatie placeholder */
+  .media-placeholder {
+    width: 100%;
+    aspect-ratio: 4/3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--ink);
+    color: var(--bg);
+    gap: 0.5rem;
+  }
+  .media-placeholder .play-icon { font-size: 1.8rem; opacity: 0.55; }
+  .media-placeholder .play-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.45;
+  }
+
+  /* ═══════════════════════════════════════════
+     LIGHTBOX
+  ═══════════════════════════════════════════ */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(8,6,4,0.97);
+    z-index: 500;
+    /* Mobile: flex column, scrollable */
+    flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .lightbox.open { display: flex; }
+
+  /* Desktop layout: row inside a centered container */
+  .lb-inner {
+    display: flex;
+    flex-direction: row;
+    gap: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 100%;
+    padding: 5rem 4vw 4rem;
+  }
+
+  .lb-img-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+  }
+  .lb-img-wrap img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* External link (animaties) */
+  .lb-ext-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    padding: 3rem 2rem;
+    border: 1px solid rgba(245,240,232,0.12);
+    min-height: 200px;
+    text-align: center;
+  }
+  .lb-ext-link .ext-icon { font-size: 2.2rem; opacity: 0.35; }
+  .lb-ext-link p {
+    font-size: 0.88rem;
+    font-style: italic;
+    color: rgba(245,240,232,0.5);
+    font-weight: 300;
+  }
+  .lb-ext-link a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    border: 1px solid var(--accent);
+    padding: 0.6rem 1.3rem;
+    transition: all 0.2s;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  .lb-ext-link a:hover, .lb-ext-link a:active { background: var(--accent); color: #f5f0e8; }
+
+  .lb-info {
+    width: 220px;
+    flex-shrink: 0;
+    color: #f5f0e8;
+  }
+  .lb-info .lb-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.2em;
+    color: rgba(245,240,232,0.28);
+    margin-bottom: 1rem;
+  }
+  .lb-info .lb-title {
+    font-size: 1.55rem;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+  }
+  .lb-info .lb-year {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .lb-info .lb-medium {
+    font-size: 0.88rem;
+    font-weight: 300;
+    color: rgba(245,240,232,0.58);
+    line-height: 1.55;
+  }
+  .lb-info .lb-dim {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    color: rgba(245,240,232,0.28);
+    margin-top: 0.35rem;
+  }
+  .lb-info .lb-note {
+    font-size: 0.8rem;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(245,240,232,0.38);
+    margin-top: 1.1rem;
+    line-height: 1.65;
+    border-top: 1px solid rgba(245,240,232,0.1);
+    padding-top: 0.9rem;
+  }
+
+  /* Close button */
+  .lb-close {
+    position: fixed;
+    top: 0; right: 0;
+    width: 56px; height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(8,6,4,0.8);
+    border: none;
+    color: rgba(245,240,232,0.55);
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+    z-index: 502;
+  }
+  .lb-close:hover, .lb-close:active { color: #f5f0e8; background: rgba(139,58,28,0.7); }
+
+  /* Prev/next arrows — desktop: sides of screen */
+  .lb-prev, .lb-next {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 52px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(245,240,232,0.06);
+    border: none;
+    color: rgba(245,240,232,0.5);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 502;
+  }
+  .lb-prev { left: 0; }
+  .lb-next { right: 0; }
+  .lb-prev:hover, .lb-next:hover,
+  .lb-prev:active, .lb-next:active {
+    background: rgba(245,240,232,0.14);
+    color: #f5f0e8;
+  }
+
+  /* Counter */
+  .lb-counter {
+    position: fixed;
+    bottom: 1.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.2em;
+    color: rgba(245,240,232,0.28);
+    z-index: 502;
+    white-space: nowrap;
+  }
+
+  /* ── MOBILE lightbox ── */
+  @media (max-width: 700px) {
+    .lb-inner {
+      flex-direction: column;
+      gap: 0;
+      align-items: stretch;
+      padding: 56px 0 100px; /* room for close btn top, nav bottom */
+      min-height: auto;
+    }
+
+    .lb-img-wrap {
+      background: rgba(0,0,0,0.3);
+      padding: 1.5rem;
+    }
+    .lb-img-wrap img {
+      max-height: 52vh;
+      width: 100%;
+      object-fit: contain;
+    }
+
+    .lb-ext-link { margin: 1.5rem; }
+
+    .lb-info {
+      width: 100%;
+      padding: 1.5rem 5vw 1rem;
+    }
+    .lb-info .lb-title { font-size: 1.35rem; }
+    .lb-info .lb-note { font-size: 0.78rem; }
+
+    /* Bottom nav bar on mobile */
+    .lb-prev, .lb-next {
+      top: auto; bottom: 0;
+      transform: none;
+      width: 50%;
+      height: 52px;
+      border-top: 1px solid rgba(245,240,232,0.1);
+    }
+    .lb-prev { left: 0; border-right: 1px solid rgba(245,240,232,0.1); }
+    .lb-next { right: 0; left: auto; }
+
+    .lb-counter { bottom: 54px; }
+  }
+
+  /* ═══════════════════════════════════════════
+     ABOUT
+  ═══════════════════════════════════════════ */
+  .about-strip {
+    padding: 3.5rem 5vw;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3.5rem;
+  }
+  @media (max-width: 700px) {
+    .about-strip { grid-template-columns: 1fr; gap: 2.5rem; padding: 2.5rem 5vw; }
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--dust);
+    margin-bottom: 1.2rem;
+  }
+  .about-text {
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.8;
+    font-style: italic;
+  }
+  .contact-line {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--dust);
+    margin-bottom: 0.9rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .contact-line a { color: var(--accent); text-decoration: none; }
+  .contact-line a:hover, .contact-line a:active { text-decoration: underline; }
+
+  /* ═══════════════════════════════════════════
+     FOOTER
+  ═══════════════════════════════════════════ */
+  footer {
+    padding: 1.5rem 5vw;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  footer p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    color: var(--dust);
+    text-transform: uppercase;
+  }
+  footer a { color: var(--dust); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="scroll-line" id="scrollLine"></div>
+
+<header>
+  <div class="title-block">
+    <h1>Wilco <em>Sinnema</em></h1>
+    <p class="subtitle">Beeldend kunstenaar — Portfolio</p>
+  </div>
+  <nav class="header-nav">
+    <a href="#gallery">Werk</a>
+    <a href="#about">Over</a>
+    <a href="https://www.kunstinzicht.nl/portfolio/contact/wilco-sinnema/index.html" target="_blank">Contact</a>
+  </nav>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu openen">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+<nav class="mobile-nav" id="mobileNav">
+  <a href="#gallery" class="mobile-nav-link">Werk</a>
+  <a href="#about" class="mobile-nav-link">Over</a>
+  <a href="https://www.kunstinzicht.nl/portfolio/contact/wilco-sinnema/index.html" target="_blank">Contact</a>
+</nav>
+
+<div class="filter-bar" id="filterBar">
+  <span class="filter-label">Filter:</span>
+  <button class="filter-btn active" data-filter="all">Alle werken</button>
+  <button class="filter-btn" data-filter="2025">2025</button>
+  <button class="filter-btn" data-filter="2024">2024</button>
+  <button class="filter-btn" data-filter="2023">2023</button>
+  <button class="filter-btn" data-filter="featured">★ Uitgelicht</button>
+  <span class="count" id="count"></span>
+</div>
+
+<section class="gallery" id="gallery"></section>
+
+<section class="about-strip" id="about">
+  <div>
+    <p class="section-label">Over het werk</p>
+    <p class="about-text">Wilco Sinnema werkt met een breed scala aan technieken en materialen — van aquarel en acryl tot collage, inkt, softpastel en mixed media. Prijzen van beschikbare werken worden op aanvraag verstrekt.</p>
+  </div>
+  <div>
+    <p class="section-label">Contact &amp; informatie</p>
+    <div class="contact-line">Kunstinzicht.nl &mdash; <a href="https://www.kunstinzicht.nl/portfolio/contact/wilco-sinnema/index.html" target="_blank">Neem contact op</a></div>
+    <div class="contact-line">Prijzen op aanvraag</div>
+    <div class="contact-line">Portfolio &mdash; <a href="https://www.kunstinzicht.nl/portfolio/werk/wilco-sinnema/index.html" target="_blank">kunstinzicht.nl</a></div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; Wilco Sinnema — Alle rechten voorbehouden</p>
+  <p><a href="https://www.kunstinzicht.nl/portfolio/werk/wilco-sinnema/index.html" target="_blank">kunstinzicht.nl</a></p>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose" aria-label="Sluiten">✕</button>
+  <button class="lb-prev" id="lbPrev" aria-label="Vorige">&#8592;</button>
+  <button class="lb-next" id="lbNext" aria-label="Volgende">&#8594;</button>
+  <div class="lb-inner">
+    <div class="lb-img-wrap" id="lbImgWrap"></div>
+    <div class="lb-info">
+      <p class="lb-num" id="lbNum"></p>
+      <h2 class="lb-title" id="lbTitle"></h2>
+      <p class="lb-year" id="lbYear"></p>
+      <p class="lb-medium" id="lbMedium"></p>
+      <p class="lb-dim" id="lbDim"></p>
+      <p class="lb-note" id="lbNote" style="display:none"></p>
+    </div>
+  </div>
+  <div class="lb-counter" id="lbCounter"></div>
+</div>
+
+<script>
+// ─── ARTWORK DATA (gegenereerd uit Portfolio.xlsx) ───────────────────────────
+// Afbeeldingen worden geladen vanuit de map: images/
+// Bestandsnamen komen exact overeen met de kolom "Bestandsnaam" in de Excel.
+
+const ARTWORKS = [
+  { title: "Study of a certain shape", filename: "Study of a certain shape (2025).jpeg", medium: "Collage met acryl, inkt en houtskool", year: 2025, dim: "70 x 50 cm", orientation: "Portrait", note: "", featured: false, is_url: false },
+  { title: "Donkere wolken", filename: "Donkere wolken.JPG", medium: "Acryl op mdf", year: 2025, dim: "100 x 150 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
+  { title: "Wolken bij Zwarte Haan", filename: "Wolken bij Zwarte Haan.JPG", medium: "Acryl op mdf", year: 2025, dim: "100 x 150 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
+  { title: "Bildts landschap III", filename: "Bildts landschap III.JPG", medium: "Aquarel", year: 2025, dim: "29 x 39 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
+  { title: "Bildts landschap II", filename: "Bildts landschap II.JPG", medium: "Aquarel", year: 2025, dim: "29 x 39 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
+  { title: "Geborgenheid", filename: "Geborgenheid.JPG", medium: "Mixed media: Acrylstift en gelpen op fotokarton", year: 2024, dim: "40 x 60 cm", orientation: "Landscape", note: "Gemaakt in het kader van het thema geborgenheid voor het vak Beeldend Onderzoek (Kunstacademie Friesland). Uitwerking is geïnspireerd op Night Crossing van Matthew Wong.", featured: true, is_url: false },
+  { title: "Vereniging", filename: "https://www.instagram.com/p/DBGmdcrI5SQ/", medium: "Stop-motion animatie", year: 2024, dim: "", orientation: "Portrait", note: "Ontstaan tijdens het vak Beeldend Onderzoek bij Kunstacademie Friesland. Gestart met een halsketting en uiteindelijk de diepte ingegaan via het rijgsnoer wat als functie heeft om te verbinden, te verenigen.", featured: true, is_url: true },
+  { title: "Dreiging", filename: "Dreiging.jpeg", medium: "Mixed media: Gouache en inkt op aquarelpapier", year: 2024, dim: "30 x 40 cm", orientation: "Landscape", note: "Ontwerp voor (uiteindelijk niet gemaakte) linodruk, gebaseerd op Code Rood.", featured: true, is_url: false },
+  { title: "Code Rood 4", filename: "Code Rood 4.JPG", medium: "Linodruk", year: 2024, dim: "15 x 20 cm", orientation: "Landscape", note: "", featured: true, is_url: false },
+  { title: "Ritme van de nerven III", filename: "Ritme van de nerven III.jpeg", medium: "Inkt", year: 2024, dim: "23 x 31 cm", orientation: "Landscape", note: "", featured: true, is_url: false },
+  { title: "Ritme van de nerven II", filename: "Ritme van de nerven II.jpeg", medium: "Inkt", year: 2024, dim: "23 x 31 cm", orientation: "Landscape", note: "", featured: true, is_url: false },
+  { title: "Ritme van de nerven I", filename: "Ritme van de nerven I.jpeg", medium: "Inkt", year: 2024, dim: "23 x 31 cm", orientation: "Landscape", note: "Gemaakt tijdens het studieweekend 2024 van Kunstacademie Friesland met het thema ritme & dissonant. Gestart vanuit de nervenstructuur van een dood blad, geprojecteerd op het net wat in een voetbaldoel hangt.", featured: true, is_url: false },
+  { title: "Code Rood III", filename: "Code Rood 3.jpeg", medium: "Mixed media: aquarelverf en inkt", year: 2024, dim: "23 x 31 cm", orientation: "Landscape", note: "Strak aangeharkt Bildts landschap, gezien vanaf de Waddenzeedijk.", featured: true, is_url: false },
+  { title: "Code Rood II", filename: "Code Rood 2.jpeg", medium: "Mixed media: aquarelverf en inkt", year: 2024, dim: "23 x 31 cm", orientation: "Landscape", note: "Strak aangeharkt Bildts landschap, gezien vanaf de Waddenzeedijk.", featured: true, is_url: false },
+  { title: "Code Rood I", filename: "Code Rood 1.jpeg", medium: "Mixed media: aquarelverf en inkt", year: 2024, dim: "23 x 31 cm", orientation: "Landscape", note: "Strak aangeharkt Bildts landschap, gezien vanaf de Waddenzeedijk.", featured: true, is_url: false },
+  { title: "Bildts landschap", filename: "Bildts landschap.jpeg", medium: "Mixed media: aquarelverf en inkt", year: 2024, dim: "23 x 31 cm", orientation: "Landscape", note: "Strak aangeharkt Bildts landschap, gezien vanaf de Waddenzeedijk.", featured: true, is_url: false },
+  { title: "Just Watch III", filename: "20240815 Just Watch 3.jpeg", medium: "Mixed media: aquarelverf en inkt", year: 2024, dim: "18 x 26 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
+  { title: "Just Watch II", filename: "20240815 Just Watch 2.jpeg", medium: "Mixed media: aquarelverf en inkt", year: 2024, dim: "18 x 26 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
+  { title: "Just Watch I", filename: "20240815 Just Watch 1.jpeg", medium: "Mixed media: aquarelverf en inkt", year: 2024, dim: "18 x 26 cm", orientation: "Landscape", note: "Just Watch — geïnspireerd vanuit de aquarelweek 2024 van Kunstacademie Friesland, is het geometrische object van Kamers Antikamers 'in de aquarelverf gezet'. Ode aan René Daniels.", featured: true, is_url: false },
+  { title: "Canterlanswei nabij Lekkum IV", filename: "20240808 Canterlanswei nabij Lekkum 4.jpeg", medium: "Aquarel", year: 2024, dim: "12,5 x 18 cm", orientation: "Landscape", note: "Tweede variant gemaakt na aanleiding van Canterlanswei nabij Lekkum I.", featured: true, is_url: false },
+  { title: "Canterlanswei nabij Lekkum III", filename: "20240808 Canterlanswei nabij Lekkum 3.jpeg", medium: "Aquarel", year: 2024, dim: "26 x 18 cm", orientation: "Portrait", note: "Variant gemaakt na aanleiding van Canterlanswei nabij Lekkum I.", featured: true, is_url: false },
+  { title: "Canterlanswei nabij Lekkum II", filename: "20240808 Canterlanswei nabij Lekkum 2.jpeg", medium: "Aquarel", year: 2024, dim: "29,7 x 21 cm", orientation: "Portrait", note: "Variant gemaakt na aanleiding van Canterlanswei nabij Lekkum I.", featured: true, is_url: false },
+  { title: "Canterlanswei nabij Lekkum I", filename: "20240808 Canterlanswei nabij Lekkum 1.jpeg", medium: "Aquarel", year: 2024, dim: "30 x 24 cm", orientation: "Portrait", note: "Gemaakt tijdens de aquarelweek 2024 van Kunstacademie Friesland, tijdens een en plein air sessie langs de Canterlanswei nabij Lekkum.", featured: true, is_url: false },
+  { title: "Impressionism", filename: "Imperfectionism (...) 2024", medium: "Acryl op canvas", year: 2024, dim: "39 x 39 cm", orientation: "Square", note: "Imperfectionism is ontstaan tijdens de Art Upgrade-cursus van Kunstacademie Friesland, in het kader van het thema metamorfose.", featured: true, is_url: false },
+  { title: "Ruimte in beweging", filename: "https://www.instagram.com/p/CygepK-Mfrp/", medium: "Animatie", year: 2023, dim: "", orientation: "Portrait", note: "Ruimte in beweging komt voort uit het project Kamers antikamers. Is ruimte een context voor beweging? Of is beweging een context voor ruimte?", featured: true, is_url: true },
+  { title: "Geen titel", filename: "Untitled 2024 3", medium: "Mixed media: Acrylverf en inkt op papier", year: 2024, dim: "70 x 50 cm", orientation: "Portrait", note: "Gemaakt in het kader van Art Upgrade blok 3 thema 'Apocalyps'", featured: true, is_url: false },
+  { title: "Geen titel", filename: "Untitled 2024 2", medium: "Mixed media: Softpastel en inkt op papier", year: 2024, dim: "35 x 50 cm", orientation: "Landscape", note: "Gemaakt in het kader van Art Upgrade blok 3 thema 'Apocalyps'", featured: true, is_url: false },
+  { title: "Geen titel", filename: "Untitled 2024 1", medium: "Softpastel op papier", year: 2024, dim: "50 x 70 cm", orientation: "Landscape", note: "Kleurstudie in het kader van Art Upgrade blok 3 thema 'Apocalyps' – geïnspireerd op Blue tree van Alle Jong.", featured: true, is_url: false },
+  { title: "Geen titel", filename: "Untitled 2023 4", medium: "3d interieur", year: 2023, dim: "", orientation: "Landscape", note: "", featured: false, is_url: false },
+  { title: "Geen titel", filename: "Untitled 2023 3", medium: "Potlood op papier", year: 2023, dim: "", orientation: "Landscape", note: "Dit werk is ontstaan in het kader van het thema 'Symboliek' – Art Upgrade blok 2 – en geïnspireerd op Het Grote Geheugen x van Robbie Cornelissen.", featured: true, is_url: false },
+  { title: "Energy", filename: "Untitled 2023 1", medium: "Mixed media: Inkt en softpastel op pastelmat", year: 2023, dim: "40 x 30 cm", orientation: "Portrait", note: "Energy toont een experiment met een ruimtelijke, geometrische vorm geïnspireerd op het werk van de Amerikaanse beeldend kunstenaar Katy Ann Gilmore.", featured: true, is_url: false },
+  { title: "KAK-1", filename: "KAK-1 2023", medium: "Mixed media: Acrylverf en inkt op papier", year: 2023, dim: "24 x 38,5 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
+  { title: "KAK-2", filename: "KAK-2 2023", medium: "Mixed media: Acrylverf en inkt op papier", year: 2023, dim: "25,2 x 39,5 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
+  { title: "KAK-3", filename: "KAK-3 2023", medium: "Mixed media: Acrylverf, inkt en gelpen op papier", year: 2023, dim: "26,5 x 37,8 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
+  { title: "KAK-4", filename: "KAK-4 2023", medium: "Mixed media: Acrylverf en inkt op papier", year: 2023, dim: "28,5 x 38 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
+  { title: "Kamers antikamers 5", filename: "KAK-5 2023", medium: "Acrylverf op papier", year: 2023, dim: "28,6 x 34,3 cm", orientation: "Landscape", note: "Een reflectieoefening vanuit de zenmeditatie: je bewaarzijn beschouwen als een ruimte, als een ruimte die kan groeien door beoefening van zen. Het project Kamers antikamers (vernoemd naar het boek van Niña Weijers) onderzoekt het visualiseren van ruimte.", featured: true, is_url: false },
+  { title: "KAK-6", filename: "KAK-6 2023", medium: "Mixed media: Acrylverf en inkt op papier", year: 2023, dim: "23,5 x 39 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
+  { title: "KAK-10", filename: "KAK-10 2023", medium: "Mixed media: Inkt en softpastel op pastelmat", year: 2023, dim: "30 x 40 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
+  { title: "KAK-11", filename: "KAK-11 2023", medium: "Mixed media: Inkt en softpastel op pastelmat", year: 2023, dim: "30 x 40 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
+  { title: "KAK-12", filename: "KAK-12 2023", medium: "Mixed media: Acrylverf en inkt op papier", year: 2023, dim: "26,7 x 36 cm", orientation: "Landscape", note: "", featured: false, is_url: false },
+  { title: "KAK-13", filename: "KAK-13 2024", medium: "Mixed media: Inkt en softpastel op papier", year: 2024, dim: "50 x 70 cm", orientation: "Portrait", note: "", featured: false, is_url: false },
+  { title: "Geen titel", filename: "Untitled 2023 2", medium: "Softpastel op pastelmat", year: 2023, dim: "30 x 40 cm", orientation: "Landscape", note: "Landschap als bij Waddenzee tussen Westhoek en Zwarte Haan", featured: false, is_url: false },
+  { title: "Kronkeltak", filename: "Kronkeltak 2023", medium: "Mixed media: Softpastel en houtskool op papier", year: 2023, dim: "", orientation: "Landscape", note: "", featured: false, is_url: false },
+];
+
+// ─── IMAGE EXTENSION HELPER ──────────────────────────────────────────────────
+// Bestandsnamen in de Excel missen soms een extensie (.jpeg / .jpg / .JPG).
+// Deze functie probeert automatisch de juiste extensie als het eerste src faalt.
+const EXTENSIONS = ['.jpeg', '.jpg', '.JPG', '.JPEG', '.png', '.PNG'];
+
+function tryExtensions(img, filename) {
+  if (!filename) return;
+  const hasExt = /\.(jpe?g|png|gif|webp)$/i.test(filename);
+  if (hasExt) {
+    // Bestand heeft al extensie — alleen fallback nodig als het echt faalt
+    img.onerror = null; // al correct pad, geen extra pogingen
+    return;
+  }
+  // Geen extensie: bouw een lijst van kandidaten
+  const candidates = EXTENSIONS.map(ext => `images/${filename}${ext}`);
+  let attempt = 0;
+  function tryNext() {
+    if (attempt >= candidates.length) return; // geen enkel pad werkt
+    img.onerror = tryNext;
+    img.src = candidates[attempt++];
+  }
+  tryNext();
+}
+
+// ─── STATE ──────────────────────────────────────────────────────────────────
+let currentFilter = 'all';
+let filteredList = [];
+let currentIndex = 0;
+
+const gallery = document.getElementById('gallery');
+const countEl = document.getElementById('count');
+
+// ─── GALLERY RENDER ──────────────────────────────────────────────────────────
+function applyFilter() {
+  if (currentFilter === 'all')           filteredList = [...ARTWORKS];
+  else if (currentFilter === 'featured') filteredList = ARTWORKS.filter(w => w.featured);
+  else                                   filteredList = ARTWORKS.filter(w => w.year === parseInt(currentFilter));
+}
+
+function renderGallery() {
+  applyFilter();
+  gallery.innerHTML = '';
+  countEl.textContent = filteredList.length + ' werk' + (filteredList.length !== 1 ? 'en' : '');
+
+  filteredList.forEach((work, i) => {
+    const div = document.createElement('div');
+    div.className = 'artwork' + (work.featured ? ' featured' : '');
+    div.style.transitionDelay = Math.min(i * 0.04, 0.6) + 's';
+
+    if (work.is_url) {
+      div.innerHTML = `
+        <div class="media-placeholder">
+          <span class="play-icon">▶</span>
+          <span class="play-label">${work.medium}</span>
+        </div>
+        <div class="artwork-overlay">
+          <p class="ov-title">${work.title}</p>
+          <p class="ov-meta">${work.year}</p>
+        </div>`;
+    } else {
+      const src = work.filename ? `images/${work.filename}` : '';
+      div.innerHTML = `
+        <img src="${src}" alt="${work.title}" loading="lazy">
+        <div class="artwork-overlay">
+          <p class="ov-title">${work.title}</p>
+          <p class="ov-meta">${work.year}${work.dim ? ' — ' + work.dim : ''}</p>
+        </div>`;
+      // Auto-try extensions if filename has none or image fails to load
+      const img = div.querySelector('img');
+      if (img) tryExtensions(img, work.filename);
+    }
+
+    div.addEventListener('click', () => openLightbox(i));
+    gallery.appendChild(div);
+    requestAnimationFrame(() => setTimeout(() => div.classList.add('visible'), 40 + i * 35));
+  });
+}
+
+// ─── FILTER BUTTONS ──────────────────────────────────────────────────────────
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderGallery();
+  });
+});
+
+// ─── HAMBURGER MENU ──────────────────────────────────────────────────────────
+const navToggle = document.getElementById('navToggle');
+const mobileNav = document.getElementById('mobileNav');
+
+navToggle.addEventListener('click', () => {
+  const isOpen = mobileNav.classList.toggle('open');
+  navToggle.classList.toggle('open', isOpen);
+  navToggle.setAttribute('aria-label', isOpen ? 'Menu sluiten' : 'Menu openen');
+});
+
+// Close mobile nav when a link is clicked
+document.querySelectorAll('.mobile-nav-link').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileNav.classList.remove('open');
+    navToggle.classList.remove('open');
+  });
+});
+
+// ─── LIGHTBOX ────────────────────────────────────────────────────────────────
+function openLightbox(idx) {
+  currentIndex = idx;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function updateLightbox() {
+  const work = filteredList[currentIndex];
+  const counter = `${currentIndex + 1} / ${filteredList.length}`;
+  document.getElementById('lbNum').textContent = counter;
+  document.getElementById('lbCounter').textContent = counter;
+  document.getElementById('lbTitle').textContent = work.title;
+  document.getElementById('lbYear').textContent = work.year;
+  document.getElementById('lbMedium').textContent = work.medium;
+  document.getElementById('lbDim').textContent = work.dim;
+
+  const noteEl = document.getElementById('lbNote');
+  if (work.note) { noteEl.textContent = work.note; noteEl.style.display = 'block'; }
+  else            { noteEl.style.display = 'none'; }
+
+  const wrap = document.getElementById('lbImgWrap');
+  if (work.is_url) {
+    wrap.innerHTML = `
+      <div class="lb-ext-link">
+        <span class="ext-icon">▶</span>
+        <p>${work.medium}</p>
+        <a href="${work.filename}" target="_blank">Bekijk op Instagram →</a>
+      </div>`;
+  } else {
+    wrap.innerHTML = `<img src="images/${work.filename}" alt="${work.title}">`;
+    const img = wrap.querySelector('img');
+    if (img) tryExtensions(img, work.filename);
+  }
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function prevWork() {
+  currentIndex = (currentIndex - 1 + filteredList.length) % filteredList.length;
+  updateLightbox();
+}
+function nextWork() {
+  currentIndex = (currentIndex + 1) % filteredList.length;
+  updateLightbox();
+}
+
+document.getElementById('lbClose').addEventListener('click', closeLightbox);
+document.getElementById('lbPrev').addEventListener('click', prevWork);
+document.getElementById('lbNext').addEventListener('click', nextWork);
+
+// Close on background tap (not on inner content)
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape')      closeLightbox();
+  if (e.key === 'ArrowLeft')   prevWork();
+  if (e.key === 'ArrowRight')  nextWork();
+});
+
+// ─── SWIPE / TOUCH NAVIGATION ────────────────────────────────────────────────
+let touchStartX = 0;
+let touchStartY = 0;
+
+document.getElementById('lightbox').addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+document.getElementById('lightbox').addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  // Only act on mostly-horizontal swipes of > 50px
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+    if (dx < 0) nextWork();
+    else        prevWork();
+  }
+}, { passive: true });
+
+// ─── SCROLL PROGRESS ────────────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  document.getElementById('scrollLine').style.width = Math.min(pct, 100) + '%';
+}, { passive: true });
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+renderGallery();
+</script>
+</body>
+</html>
